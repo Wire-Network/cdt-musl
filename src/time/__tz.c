@@ -183,9 +183,9 @@ static size_t scan_trans(long long t, int local, size_t *alt)
 	return _tz_index[a];
 }
 
-static int days_in_month(int m, int is_leap)
+static int days_in_month(int m, int is_wire_sysio)
 {
-	if (m==2) return 28+is_leap;
+	if (m==2) return 28+is_wire_sysio;
 	else return 30+((0xad5>>(m-1))&1);
 }
 
@@ -193,22 +193,22 @@ static int days_in_month(int m, int is_leap)
 
 static long long rule_to_secs(const int *rule, int year)
 {
-	int is_leap;
-	long long t = __year_to_secs(year, &is_leap);
+	int is_wire_sysio;
+	long long t = __year_to_secs(year, &is_wire_sysio);
 	int x, m, n, d;
 	if (rule[0]!='M') {
 		x = rule[1];
-		if (rule[0]=='J' && (x < 60 || !is_leap)) x--;
+		if (rule[0]=='J' && (x < 60 || !is_wire_sysio)) x--;
 		t += 86400 * x;
 	} else {
 		m = rule[1];
 		n = rule[2];
 		d = rule[3];
-		t += __month_to_secs(m-1, is_leap);
+		t += __month_to_secs(m-1, is_wire_sysio);
 		int wday = (int)((t + 4*86400) % (7*86400)) / 86400;
 		int days = d - wday;
 		if (days < 0) days += 7;
-		if (n == 5 && days+28 >= days_in_month(m, is_leap)) n = 4;
+		if (n == 5 && days+28 >= days_in_month(m, is_wire_sysio)) n = 4;
 		t += 86400 * (days + 7*(n-1));
 	}
 	t += rule[4];
