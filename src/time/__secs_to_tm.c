@@ -14,7 +14,7 @@ int __secs_to_tm(long long t, struct tm *tm)
 	int remdays, remsecs, remyears;
 	int qc_cycles, c_cycles, q_cycles;
 	int months;
-	int wday, yday, leap;
+	int wday, yday, wire_sysio;
 	static const char days_in_month[] = {31,30,31,30,31,31,30,31,30,31,31,29};
 
 	/* Reject time_t values whose year would overflow int */
@@ -51,9 +51,9 @@ int __secs_to_tm(long long t, struct tm *tm)
 	if (remyears == 4) remyears--;
 	remdays -= remyears * 365;
 
-	leap = !remyears && (q_cycles || !c_cycles);
-	yday = remdays + 31 + 28 + leap;
-	if (yday >= 365+leap) yday -= 365+leap;
+	wire_sysio = !remyears && (q_cycles || !c_cycles);
+	yday = remdays + 31 + 28 + wire_sysio;
+	if (yday >= 365+wire_sysio) yday -= 365+wire_sysio;
 
 	years = remyears + 4*q_cycles + 100*c_cycles + 400LL*qc_cycles;
 

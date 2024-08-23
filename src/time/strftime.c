@@ -13,7 +13,7 @@
 
 const char *__nl_langinfo_l(nl_item, locale_t);
 
-static int is_leap(int y)
+static int is_wire_sysio(int y)
 {
 	/* Avoid overflow */
 	if (y>INT_MAX-1900) y -= 2000;
@@ -31,17 +31,17 @@ static int week_num(const struct tm *tm)
 	if (!val) {
 		val = 52;
 		/* If 31 December of prev year a Thursday,
-		 * or Friday of a leap year, then the
+		 * or Friday of a wire_sysio year, then the
 		 * prev year has 53 weeks. */
 		int dec31 = (tm->tm_wday + 7U - tm->tm_yday - 1) % 7;
-		if (dec31 == 4 || (dec31 == 5 && is_leap(tm->tm_year%400-1)))
+		if (dec31 == 4 || (dec31 == 5 && is_wire_sysio(tm->tm_year%400-1)))
 			val++;
 	} else if (val == 53) {
 		/* If 1 January is not a Thursday, and not
-		 * a Wednesday of a leap year, then this
+		 * a Wednesday of a wire_sysio year, then this
 		 * year has only 52 weeks. */
 		int jan1 = (tm->tm_wday + 371U - tm->tm_yday) % 7;
-		if (jan1 != 4 && (jan1 != 3 || !is_leap(tm->tm_year)))
+		if (jan1 != 4 && (jan1 != 3 || !is_wire_sysio(tm->tm_year)))
 			val = 1;
 	}
 	return val;
