@@ -3,7 +3,7 @@
 #include <bits/wchar.h>
 #include <bits/stdint.h>
 
-#ifdef EOSIO_NATIVE
+#ifdef SYSIO_NATIVE
 #define _Addr long long 
 #define __INTPTR_WIDTH__ 64
 #else
