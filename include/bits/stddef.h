@@ -1,9 +1,4 @@
 #pragma once
 
-#ifdef SYSIO_NATIVE
-   typedef unsigned long size_t;
-   typedef long ptrdiff_t;
-#else
-   typedef unsigned int size_t;
-   typedef int ptrdiff_t; //XXX intptr_t
-#endif
+typedef __SIZE_TYPE__ size_t;
+typedef __PTRDIFF_TYPE__ ptrdiff_t;
